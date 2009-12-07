@@ -16,52 +16,52 @@ import FWCore.ParameterSet.Config as cms
                                
 
 #Define the Reco quality cut
-singleRecoMuonPt20Filter = cms.EDFilter("MuonRefSelector",
-                                        src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 20.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+singleRecoElectronPt20Filter = cms.EDFilter("GsfElectronRefSelector",
+                                        src = cms.InputTag("gsfElectrons"),
+                                        cut = cms.string('pt > 20.0 && abs(eta) < 2.1 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1) 
                                         )
 
-singleRecoMuonPt15Filter = cms.EDFilter("MuonRefSelector",
-                                        src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 15.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+singleRecoElectronPt15Filter = cms.EDFilter("GsfElectronRefSelector",
+                                        src = cms.InputTag("gsfElectrons"),
+                                        cut = cms.string('pt > 15.0 && abs(eta) < 2.1 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
-singleRecoMuonPt10Filter = cms.EDFilter("MuonRefSelector",
-                                        src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 10.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+singleRecoElectronPt10Filter = cms.EDFilter("GsfElectronRefSelector",
+                                        src = cms.InputTag("gsfElectrons"),
+                                        cut = cms.string('pt > 10.0 && abs(eta) < 2.1 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
-singleRecoMuonPt5Filter = cms.EDFilter("MuonRefSelector",
-                                        src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+singleRecoElectronPt5Filter = cms.EDFilter("GsfElectronRefSelector",
+                                        src = cms.InputTag("gsfElectrons"),
+                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
 #Define group sequence, using HLT/Reco quality cut. 
 #singleMuHLTQualitySeq = cms.Sequence()
-singleMuPt20RecoQualitySeq = cms.Sequence(
-    #singleMuHLT+
-    singleRecoMuonPt20Filter
+singleElectronPt20RecoQualitySeq = cms.Sequence(
+    #singleElectronHLT+
+    singleRecoElectronPt20Filter
 )
 
-singleMuPt15RecoQualitySeq = cms.Sequence(
-    #singleMuHLT+
-    singleRecoMuonPt15Filter
+singleElectronPt15RecoQualitySeq = cms.Sequence(
+    #singleElectronHLT+
+    singleRecoElectronPt15Filter
 )
 
-singleMuPt10RecoQualitySeq = cms.Sequence(
-    #singleMuHLT+
-    singleRecoMuonPt10Filter
+singleElectronPt10RecoQualitySeq = cms.Sequence(
+    #singleElectronHLT+
+    singleRecoElectronPt10Filter
 )
 
-singleMuPt5RecoQualitySeq = cms.Sequence(
-        #singleMuHLT+
-        singleRecoMuonPt5Filter
+singleElectronPt5RecoQualitySeq = cms.Sequence(
+        #singleElectronHLT+
+        singleRecoElectronPt5Filter
         )

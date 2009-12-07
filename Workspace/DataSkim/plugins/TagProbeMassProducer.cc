@@ -13,7 +13,7 @@
 //
 // Original Author:  Nadia Adam
 //         Created:  Wed Apr 16 09:46:30 CDT 2008
-// $Id: TagProbeMassProducer.cc,v 1.4 2009/09/22 19:43:23 ahunt Exp $
+// $Id: TagProbeMassProducer.cc,v 1.1 2009/11/06 23:04:39 tdaniels Exp $
 //
 //
 
@@ -112,7 +112,7 @@ TagProbeMassProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	    bool isPassing = isPassingProbe (iprobe);
 
-	    TPmass->push_back(invMass);
+	    if (isPassing) TPmass->push_back(invMass);
 	 }	 
       }
    }
@@ -145,7 +145,7 @@ bool TagProbeMassProducer::isPassingProbe (const unsigned int iProbe) const {
   for (unsigned int iPassProbe = 0; iPassProbe < numPassingProbes; ++iPassProbe) {
     passingProbeRef = passingProbes->refAt(iPassProbe);
     if (passingProbeRef == probeRef) {
-      return true;
+      return true;      
     }
   }
   return false;

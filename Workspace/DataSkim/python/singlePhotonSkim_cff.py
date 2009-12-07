@@ -15,16 +15,45 @@ import FWCore.ParameterSet.Config as cms
 # )
                                
 #Define the Reco quality cut
-singlePhotonFilter = cms.EDFilter("PhotonSelector",
+singlePhotonPt20Filter = cms.EDFilter("PhotonSelector",
                                      src = cms.InputTag("photons"),
                                      cut = cms.string('pt > 20 && abs(eta) < 2.0' ),
                                      filter = cms.bool(True)                                                  
 )
+singlePhotonPt15Filter = cms.EDFilter("PhotonSelector",
+                                                                           src = cms.InputTag("photons"),
+                                                                           cut = cms.string('pt > 15 && abs(eta) < 2.0' ),
+                                                                           filter = cms.bool(True)
+                                      )
+singlePhotonPt10Filter = cms.EDFilter("PhotonSelector",
+                                                                           src = cms.InputTag("photons"),
+                                                                           cut = cms.string('pt > 10 && abs(eta) < 2.0' ),
+                                                                           filter = cms.bool(True)
+                                      )
+singlePhotonPt5Filter = cms.EDFilter("PhotonSelector",
+                                                                           src = cms.InputTag("photons"),
+                                                                           cut = cms.string('pt > 5 && abs(eta) < 2.0' ),
+                                                                           filter = cms.bool(True)
+                                      )
+
+
 
 #Define group sequence, using HLT/Reco quality cut. 
 #exoticaMuHLTQualitySeq = cms.Sequence()
-singlePhotonQualitySeq = cms.Sequence(
+singlePhotonPt20QualitySeq = cms.Sequence(
     #exoticaMuHLT+
-    singlePhotonFilter
+    singlePhotonPt20Filter
 )
+singlePhotonPt15QualitySeq = cms.Sequence(
+        #exoticaMuHLT+
+        singlePhotonPt15Filter
+        )
+singlePhotonPt10QualitySeq = cms.Sequence(
+        #exoticaMuHLT+
+        singlePhotonPt10Filter
+        )
+singlePhotonPt5QualitySeq = cms.Sequence(
+        #exoticaMuHLT+
+        singlePhotonPt5Filter
+        )
 

@@ -13,12 +13,12 @@ process.maxEvents = cms.untracked.PSet(
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 #    '/store/relval/CMSSW_3_3_0/RelValZMM/GEN-SIM-RECO/STARTUP31X_V8-v1/0009/BE1D1CF5-2FB7-DE11-915E-001D09F290CE.root',
-#    '/store/relval/CMSSW_3_3_0/RelValInclusiveppMuX/GEN-SIM-RECO/MC_31X_V9-v1/0002/BA1B9439-C4B7-DE11-93E3-001A92971B0C.root'
+#    '/store/relval/CMSSW_3_3_0/RelValInclusiveppMuX/GEN-SIM-RECO/MC_31X_V9-v1/0002/BA1B9439-C4B7-DE11-93E3-001A92971B0C.root',
 #    '/store/relval/CMSSW_3_3_0/RelValJpsiMM_Pt_0_20/GEN-SIM-RECO/STARTUP31X_V8-v1/0002/FE7BCA5A-73B7-DE11-8BFE-001A92810ADE.root',
-#    '/store/relval/CMSSW_3_3_0/RelValTTbar/GEN-SIM-RECO/STARTUP31X_V8-v1/0009/C8EF0A0D-75B7-DE11-A2E8-001D09F27003.root'
-    '/store/relval/CMSSW_3_3_0/RelValMinBias/GEN-SIM-RECO/MC_31X_V9-v1/0009/BEBD21F6-74B7-DE11-8B38-000423D991D4.root',
-    '/store/relval/CMSSW_3_3_0/RelValMinBias/GEN-SIM-RECO/MC_31X_V9-v1/0009/166B328A-43B7-DE11-857C-001D09F24934.root',
-    '/store/relval/CMSSW_3_3_0/RelValMinBias/GEN-SIM-RECO/MC_31X_V9-v1/0008/F4A8A24E-B7B6-DE11-850C-001D09F2A465.root'
+    '/store/relval/CMSSW_3_3_4/RelValTTbar/GEN-SIM-RECO/STARTUP3X_V8A-v1/0001/4C6D127D-B0D5-DE11-A6C9-002618943939.root',
+#    '/store/relval/CMSSW_3_3_0/RelValZEE/GEN-SIM-RECO/MC_31X_V9-v2/0002/AA25E184-4ABD-DE11-AC55-0017312B5E1D.root',
+    '/store/relval/CMSSW_3_3_4/RelValMinBias/GEN-SIM-RECO/STARTUP3X_V8A-v1/0001/F24C0338-6BD5-DE11-A9D4-001A9281170A.root',
+    '/store/relval/CMSSW_3_3_4/RelValMinBias/GEN-SIM-RECO/STARTUP3X_V8A-v1/0000/A0425179-3DD5-DE11-A4F9-001731A2832D.root'
 #    'file:00E91114-65D8-DE11-A993-000423D951D4.root',
 #    'file:0AB77EB4-61D8-DE11-B504-001617C3B65A.root',
 #    'file:12DB83CF-60D8-DE11-8468-0019B9F72D71.root',
@@ -62,15 +62,18 @@ process.source = cms.Source("PoolSource",
 #load the EventContent and Skim cff/i files for EXOMu sub-skim.
 process.load('Workspace.data_skim.singleMuonSkim_EventContent_cfi')
 process.load('Workspace.data_skim.singleMuonSkim_cff')
-process.load('Workspace.data_skim.muonZMMTagProbe_EventContent_cfi')
-process.load('Workspace.data_skim.muonJPsiMMTagProbe_EventContent_cfi')
+process.load('Workspace.data_skim.singleElectronSkim_EventContent_cfi')
+process.load('Workspace.data_skim.singleElectronSkim_cff')
+process.load('Workspace.data_skim.muonTagProbe_EventContent_cfi')
 process.load('Workspace.data_skim.muonTagProbeFilters_cff')
+process.load('Workspace.data_skim.electronTagProbe_EventContent_cfi')
+process.load('Workspace.data_skim.electronTagProbeFilters_cff')
 process.load('Workspace.data_skim.singlePhotonSkim_EventContent_cfi')
 process.load('Workspace.data_skim.singlePhotonSkim_cff')
-process.load('Workspace.data_skim.singleJetSkim_EventContent_cfi')
-process.load('Workspace.data_skim.singleJetSkim_cff')
-process.load('Workspace.data_skim.singleMETSkim_EventContent_cfi')
-process.load('Workspace.data_skim.singleMETSkim_cff')
+process.load('Workspace.data_skim.jetSkim_EventContent_cfi')
+process.load('Workspace.data_skim.jetSkim_cff')
+process.load('Workspace.data_skim.METSkim_EventContent_cfi')
+process.load('Workspace.data_skim.METSkim_cff')
 
 #possible trigger modification by user, defualt HLT_Mu9 in EXOMuOct09_cff.py
 #process.exoticaMuHLT.HLTPaths = ['HLT_Mu3']
@@ -99,12 +102,31 @@ process.load('Workspace.data_skim.singleMETSkim_cff')
 
 #Possible exoticaMuHLTQualitySeq or exoticaMuRecoQualitySeq selection by user
 #process.exoticaMuSkimPath=cms.Path(process.exoticaMuHLTQualitySeq)
-process.singleMuSkimPath=cms.Path(process.singleMuRecoQualitySeq)
+process.singleMuPt20SkimPath=cms.Path(process.singleMuPt20RecoQualitySeq)
+process.singleMuPt15SkimPath=cms.Path(process.singleMuPt15RecoQualitySeq)
+process.singleMuPt10SkimPath=cms.Path(process.singleMuPt10RecoQualitySeq)
+process.singleMuPt5SkimPath=cms.Path(process.singleMuPt5RecoQualitySeq)
+process.singleElectronPt20SkimPath=cms.Path(process.singleElectronPt20RecoQualitySeq)
+process.singleElectronPt15SkimPath=cms.Path(process.singleElectronPt15RecoQualitySeq)
+process.singleElectronPt10SkimPath=cms.Path(process.singleElectronPt10RecoQualitySeq)
+process.singleElectronPt5SkimPath=cms.Path(process.singleElectronPt5RecoQualitySeq)
+process.singlePhotonPt20SkimPath=cms.Path(process.singlePhotonPt20QualitySeq)
+process.singlePhotonPt15SkimPath=cms.Path(process.singlePhotonPt15QualitySeq)
+process.singlePhotonPt10SkimPath=cms.Path(process.singlePhotonPt10QualitySeq)
+process.singlePhotonPt5SkimPath=cms.Path(process.singlePhotonPt5QualitySeq)
 process.muonZMMSkimPath=cms.Path(process.muonZMMRecoQualitySeq)
 process.muonJPsiMMSkimPath=cms.Path(process.muonJPsiMMRecoQualitySeq)
-process.singlePhotonSkimPath=cms.Path(process.singlePhotonQualitySeq)
-process.singleJetSkimPath=cms.Path(process.singleJetRecoQualitySeq)
-process.singleMETSkimPath=cms.Path(process.singleMETQualitySeq)
+process.electronZEESkimPath=cms.Path(process.electronZEERecoQualitySeq)
+process.jetSkimPath=cms.Path(process.jetRecoQualitySeq)
+process.METSkimPath=cms.Path(process.METQualitySeq)
 
-process.endPath = cms.EndPath(process.singleMuOutputModule+process.muonZMMOutputModule+process.muonJPsiMMOutputModule+process.singlePhotonOutputModule+process.singleJetOutputModule+process.singleMETOutputModule)
-#process.endPath = cms.EndPath(process.singleMuOutputModule+process.singlePhotonOutputModule+process.muonZMMOutputModule+process.singleJetOutputModule+process.singleMETOutputModule)
+process.endPath = cms.EndPath(process.singleMuPt20OutputModule+process.singleMuPt15OutputModule+process.singleMuPt10OutputModule+
+                              process.singleMuPt5OutputModule+
+                              process.singleElectronPt20OutputModule+process.singleElectronPt15OutputModule+process.singleElectronPt10OutputModule+
+                              process.singleElectronPt5OutputModule+
+                              process.singlePhotonPt20OutputModule+process.singlePhotonPt15OutputModule+process.singlePhotonPt10OutputModule+
+                              process.singlePhotonPt5OutputModule+                              
+                              process.muonZMMOutputModule+process.muonJPsiMMOutputModule+
+                              process.electronZEEOutputModule+
+                              process.jetOutputModule+process.METOutputModule)
+#process.endPath = cms.EndPath(process.singleMuOutputModule+process.singlePhotonOutputModule+process.muonZMMOutputModule+process.jetOutputModule+process.METOutputModule)

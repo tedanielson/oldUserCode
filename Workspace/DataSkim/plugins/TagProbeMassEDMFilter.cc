@@ -13,7 +13,7 @@
 //
 // Original Author:  Nadia Adam
 //         Created:  Fri Jun  6 09:10:41 CDT 2008
-// $Id: TagProbeMassEDMFilter.cc,v 1.3 2009/03/24 19:32:38 ahunt Exp $
+// $Id: TagProbeMassEDMFilter.cc,v 1.1 2009/11/06 23:04:39 tdaniels Exp $
 //
 //
 
@@ -62,8 +62,6 @@ TagProbeMassEDMFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
    using namespace edm;
    using namespace std;
 
-   cout << "filter called" << endl;
-
    // Pass the event if there are some TP pairs ...
    Handle< vector<float> > tp_mass;
 
@@ -75,7 +73,6 @@ TagProbeMassEDMFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
    }
 
    int nrTP = tp_mass->size();
-   cout << "nrTP = " << nrTP << endl;
 
    if( nrTP > 0 ) return true;
    else           return false;
