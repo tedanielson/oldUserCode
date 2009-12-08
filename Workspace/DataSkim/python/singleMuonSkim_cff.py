@@ -18,28 +18,28 @@ import FWCore.ParameterSet.Config as cms
 #Define the Reco quality cut
 singleRecoMuonPt20Filter = cms.EDFilter("MuonRefSelector",
                                         src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 20.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+                                        cut = cms.string('pt > 20.0 && abs(eta) < 2.1' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1) 
                                         )
 
 singleRecoMuonPt15Filter = cms.EDFilter("MuonRefSelector",
                                         src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 15.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+                                        cut = cms.string('pt > 15.0 && abs(eta) < 2.1' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
 singleRecoMuonPt10Filter = cms.EDFilter("MuonRefSelector",
                                         src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 10.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+                                        cut = cms.string('pt > 10.0 && abs(eta) < 2.1' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
 singleRecoMuonPt5Filter = cms.EDFilter("MuonRefSelector",
                                         src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1 && isGlobalMuon > 0' ),
+                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )

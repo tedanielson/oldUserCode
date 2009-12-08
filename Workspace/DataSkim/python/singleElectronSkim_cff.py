@@ -44,6 +44,26 @@ singleRecoElectronPt5Filter = cms.EDFilter("GsfElectronRefSelector",
                                         minN    = cms.int32(1)
                                         )
 
+superClusterMerger =  cms.EDFilter("EgammaSuperClusterMerger",
+                                   src = cms.VInputTag(cms.InputTag('correctedHybridSuperClusters'),
+                                                       cms.InputTag('correctedMulti5x5SuperClustersWithPreshower'))
+                                   )
+superClusterCands = cms.EDProducer("ConcreteEcalCandidateProducer",
+                                   src = cms.InputTag("superClusterMerger"),
+                                   particleType = cms.string('e-')
+                                   )
+
+goodSuperClusters = cms.EDFilter("CandViewRefSelector",
+                                 src = cms.InputTag("superClusterCands"),
+                                 cut = cms.string('et > 5.0')
+                                 )
+
+superClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
+                                      src = cms.InputTag("goodSuperClusters"),
+                                      minNumber = cms.uint32(1)
+                                      )
+
+
 #Define group sequence, using HLT/Reco quality cut. 
 #singleMuHLTQualitySeq = cms.Sequence()
 singleElectronPt20RecoQualitySeq = cms.Sequence(
@@ -65,3 +85,7 @@ singleElectronPt5RecoQualitySeq = cms.Sequence(
         #singleElectronHLT+
         singleRecoElectronPt5Filter
         )
+
+singleElectronSCRecoQualitySeq = cms.Sequence(
+    superClusterMerger+superClusterCands+goodSuperClusters+superClusterPt5Filter
+    )
