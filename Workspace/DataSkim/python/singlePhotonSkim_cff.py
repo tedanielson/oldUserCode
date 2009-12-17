@@ -21,20 +21,44 @@ singlePhotonPt20Filter = cms.EDFilter("PhotonSelector",
                                      filter = cms.bool(True)                                                  
 )
 singlePhotonPt15Filter = cms.EDFilter("PhotonSelector",
-                                                                           src = cms.InputTag("photons"),
-                                                                           cut = cms.string('pt > 15 && abs(eta) < 2.0' ),
-                                                                           filter = cms.bool(True)
+                                      src = cms.InputTag("photons"),
+                                      cut = cms.string('pt > 15 && abs(eta) < 2.0' ),
+                                      filter = cms.bool(True)
                                       )
 singlePhotonPt10Filter = cms.EDFilter("PhotonSelector",
-                                                                           src = cms.InputTag("photons"),
-                                                                           cut = cms.string('pt > 10 && abs(eta) < 2.0' ),
-                                                                           filter = cms.bool(True)
+                                      src = cms.InputTag("photons"),
+                                      cut = cms.string('pt > 10 && abs(eta) < 2.0' ),
+                                      filter = cms.bool(True)
                                       )
 singlePhotonPt5Filter = cms.EDFilter("PhotonSelector",
-                                                                           src = cms.InputTag("photons"),
-                                                                           cut = cms.string('pt > 5 && abs(eta) < 2.0' ),
-                                                                           filter = cms.bool(True)
-                                      )
+                                     src = cms.InputTag("photons"),
+                                     cut = cms.string('pt > 5 && abs(eta) < 2.0' ),
+                                     filter = cms.bool(True)
+                                     )
+
+
+egSuperClusterMerger =  cms.EDFilter("EgammaSuperClusterMerger",
+                                   src = cms.VInputTag(cms.InputTag('correctedHybridSuperClusters'),
+                                                       cms.InputTag('correctedMulti5x5SuperClustersWithPreshower'))
+                                   )
+egSuperClusterCands = cms.EDProducer("ConcreteEcalCandidateProducer",
+                                   src = cms.InputTag("egSuperClusterMerger"),
+                                   particleType = cms.string('gamma')
+                                   )
+
+eggoodSuperClusters = cms.EDFilter("CandViewRefSelector",
+                                 src = cms.InputTag("egSuperClusterCands"),
+                                 cut = cms.string('et > 3.0')
+                                 )
+
+egSuperClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
+                                     src = cms.InputTag("eggoodSuperClusters"),
+                                     minNumber = cms.uint32(2)
+                                     )
+
+oneEmCluster = cms.Sequence(
+        egSuperClusterMerger+egSuperClusterCands+eggoodSuperClusters+egSuperClusterPt5Filter
+            )
 
 
 
@@ -54,6 +78,6 @@ singlePhotonPt10QualitySeq = cms.Sequence(
         )
 singlePhotonPt5QualitySeq = cms.Sequence(
         #exoticaMuHLT+
-        singlePhotonPt5Filter
+        oneEmCluster+singlePhotonPt5Filter
         )
 

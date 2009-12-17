@@ -39,7 +39,7 @@ singleRecoMuonPt10Filter = cms.EDFilter("MuonRefSelector",
 
 singleRecoMuonPt5Filter = cms.EDFilter("MuonRefSelector",
                                         src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1' ),
+                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1 && ( isGlobalMuon=1 && ((isTrackerMuon =1  && numberOfMatches>=1 ) || isStandAloneMuon=1))' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
