@@ -48,27 +48,27 @@ jetFilter = cms.EDFilter("CandViewCountFilter",
 
 #===== add electrons =======
 
-superClusterMerger =  cms.EDFilter("EgammaSuperClusterMerger",
+jetSuperClusterMerger =  cms.EDFilter("EgammaSuperClusterMerger",
                                    src = cms.VInputTag(cms.InputTag('correctedHybridSuperClusters'),
                                                        cms.InputTag('correctedMulti5x5SuperClustersWithPreshower'))
                                    )
-superClusterCands = cms.EDProducer("ConcreteEcalCandidateProducer",
-                                   src = cms.InputTag("superClusterMerger"),
+jetSuperClusterCands = cms.EDProducer("ConcreteEcalCandidateProducer",
+                                   src = cms.InputTag("jetSuperClusterMerger"),
                                    particleType = cms.string('e-')
                                    )
 
-goodSuperClusters = cms.EDFilter("CandViewRefSelector",
-                                 src = cms.InputTag("superClusterCands"),
+goodJetSuperClusters = cms.EDFilter("CandViewRefSelector",
+                                 src = cms.InputTag("jetSuperClusterCands"),
                                  cut = cms.string('et > 3.0')
                                  )
 
-superClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
-                                      src = cms.InputTag("goodSuperClusters"),
+jetSuperClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
+                                      src = cms.InputTag("goodJetSuperClusters"),
                                       minNumber = cms.uint32(2)
                                       )
 
 twoEmClusters = cms.Sequence(
-    superClusterMerger+superClusterCands+goodSuperClusters+superClusterPt5Filter
+    jetSuperClusterMerger+jetSuperClusterCands+goodJetSuperClusters+jetSuperClusterPt5Filter
     )
 
 #Define group sequence, using HLT/Reco quality cut. 
