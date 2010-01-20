@@ -39,35 +39,10 @@ singleRecoMuonPt10Filter = cms.EDFilter("MuonRefSelector",
 
 singleRecoMuonPt5Filter = cms.EDFilter("MuonRefSelector",
                                         src = cms.InputTag("muons"),
-                                        cut = cms.string('pt > 0.5 && abs(eta) < 2.1 && isGlobalMuon == 1  && abs (track().d0) < 2 ' ),
+                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1 && ( isGlobalMuon=1 && ((isTrackerMuon =1  && numberOfMatches>=1 ) || isStandAloneMuon=1))' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
-
-
-muonSCMerger =  cms.EDFilter("EgammaSuperClusterMerger",
-                                   src = cms.VInputTag(cms.InputTag('correctedHybridSuperClusters'),
-                                                       cms.InputTag('correctedMulti5x5SuperClustersWithPreshower'))
-                                   )
-muonSCCands = cms.EDProducer("ConcreteEcalCandidateProducer",
-                                   src = cms.InputTag("muonSCMerger"),
-                                   particleType = cms.string('mu+')
-                                   )
-
-goodMuonSCs = cms.EDFilter("CandViewRefSelector",
-                                 src = cms.InputTag("muonSCCands"),
-                                 cut = cms.string('et > 2.0')
-                                 )
-
-muonSCPt5Filter = cms.EDFilter("CandViewCountFilter",
-                                     src = cms.InputTag("goodMuonSCs"),
-                                     minNumber = cms.uint32(2)
-                                     )
-
-muonEmClusters = cms.Sequence(
-    muonSCMerger+muonSCCands+goodMuonSCs+muonSCPt5Filter
-    )
-
 
 #Define group sequence, using HLT/Reco quality cut. 
 #singleMuHLTQualitySeq = cms.Sequence()
@@ -88,6 +63,5 @@ singleMuPt10RecoQualitySeq = cms.Sequence(
 
 singleMuPt5RecoQualitySeq = cms.Sequence(
         #singleMuHLT+
-#    muonEmClusters+
         singleRecoMuonPt5Filter
         )

@@ -46,7 +46,7 @@ singleMuPt5OutputModule = cms.OutputModule("PoolOutputModule",
     filterName = cms.untracked.string('EXOMu'), #name a name you like.
     dataTier = cms.untracked.string('EXOGroup')
     ),
-                                           fileName = cms.untracked.string('muonPt5Skim.root') # can be modified later in EXOMuOct09_cfg.py in  test directory.
+                                           fileName = cms.untracked.string('muonPt05Skim.root') # can be modified later in EXOMuOct09_cfg.py in  test directory.
                                            )
 
 #default output contentFEVTHLTALLEventContent

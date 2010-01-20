@@ -58,7 +58,7 @@ superClusterPt5OutputModule = cms.OutputModule("PoolOutputModule",
     filterName = cms.untracked.string('EXOMu'), #name a name you like.
     dataTier = cms.untracked.string('EXOGroup')
     ),
-                                               fileName = cms.untracked.string('ecalSCPt5Skim.root')
+                                               fileName = cms.untracked.string('electronPt1_ecalSCPt1Skim.root')
                                                  )
 
 

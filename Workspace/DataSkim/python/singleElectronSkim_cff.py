@@ -16,6 +16,7 @@ import FWCore.ParameterSet.Config as cms
                                
 
 #Define the Reco quality cut
+
 singleRecoElectronPt20Filter = cms.EDFilter("GsfElectronRefSelector",
                                         src = cms.InputTag("gsfElectrons"),
                                         cut = cms.string('pt > 20.0 && abs(eta) < 2.1 ' ),
@@ -39,7 +40,7 @@ singleRecoElectronPt10Filter = cms.EDFilter("GsfElectronRefSelector",
 
 singleRecoElectronPt5Filter = cms.EDFilter("GsfElectronRefSelector",
                                         src = cms.InputTag("gsfElectrons"),
-                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.1 ' ),
+                                        cut = cms.string('pt > 1.0 && abs(eta) < 2.1 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
@@ -55,7 +56,7 @@ superClusterCands = cms.EDProducer("ConcreteEcalCandidateProducer",
 
 goodSuperClusters = cms.EDFilter("CandViewRefSelector",
                                  src = cms.InputTag("superClusterCands"),
-                                 cut = cms.string('et > 5.0')
+                                 cut = cms.string('et > 1.0')
                                  )
 
 superClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
@@ -63,6 +64,27 @@ superClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
                                       minNumber = cms.uint32(1)
                                       )
 
+electronCounter = cms.EDFilter("CandViewCountFilter",
+                               src = cms.InputTag("gsfElectrons"),
+                               minNumber = cms.uint32(1)
+                               )
+
+#from RecoEgamma.EgammaElectronProducers.ecalDrivenElectronSeeds_cfi import *
+
+#ecalDrivenElectronSeeds.SCEtCut = cms.double(1.0)
+#ecalDrivenElectronSeeds.applyHOverECut = cms.bool(False)
+#ecalDrivenElectronSeeds.SeedConfiguration.SeedConfigurationnSigmasDeltaZ1 = cms.double(5.)
+#ecalDrivenElectronSeeds.SeedConfiguration.z2MinB = cms.double(-0.9)
+#ecalDrivenElectronSeeds.SeedConfiguration.z2MaxB = cms.double(0.9)
+#ecalDrivenElectronSeeds.SeedConfiguration.r2MinF = cms.double(-1.5)
+#ecalDrivenElectronSeeds.SeedConfiguration.r2MaxF = cms.double(1.5)
+#ecalDrivenElectronSeeds.SeedConfiguration.rMinI = cms.double(-2.)
+#ecalDrivenElectronSeeds.SeedConfiguration.rMaxI = cms.double(2.)
+#ecalDrivenElectronSeeds.SeedConfiguration.DeltaPhi1Low = cms.double(0.3)
+#ecalDrivenElectronSeeds.SeedConfiguration.DeltaPhi1High = cms.double(0.3)
+#ecalDrivenElectronSeeds.SeedConfiguration.DeltaPhi2 = cms.double(0.3)
+#gsfElectrons.applyPreselection = cms.bool(False)
+#gsfElectrons.applyAmbResolution = cms.bool(True)
 
 #Define group sequence, using HLT/Reco quality cut. 
 #singleMuHLTQualitySeq = cms.Sequence()
@@ -87,5 +109,5 @@ singleElectronPt5RecoQualitySeq = cms.Sequence(
         )
 
 singleElectronSCRecoQualitySeq = cms.Sequence(
-    superClusterMerger+superClusterCands+goodSuperClusters+superClusterPt5Filter
+    superClusterMerger+superClusterCands+goodSuperClusters+superClusterPt5Filter+singleRecoElectronPt5Filter
     )
