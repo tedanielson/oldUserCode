@@ -82,9 +82,9 @@ TkStaUnmatched = cms.EDFilter("RecoChargedCandidateMatchedProbeMaker",
 
 # Make the tag probe association map
 JPsiMMTagProbeMap = cms.EDProducer("TagProbeMassProducer",
-                                     MassMaxCut = cms.untracked.double(10.0),
+                                     MassMaxCut = cms.untracked.double(4.5),
                                      TagCollection = cms.InputTag("tagCands"),
-                                     MassMinCut = cms.untracked.double(2.0),
+                                     MassMinCut = cms.untracked.double(1.5),
                                      ProbeCollection = cms.InputTag("tkProbeCands"),
                                      PassingProbeCollection = cms.InputTag("TkStaMatched")
                                  )

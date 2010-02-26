@@ -28,6 +28,7 @@ process.load('Workspace.data_skim.jetSkim_EventContent_cfi')
 process.load('Workspace.data_skim.jetSkim_cff')
 process.load('Workspace.data_skim.METSkim_EventContent_cfi')
 process.load('Workspace.data_skim.METSkim_cff')
+process.load('Workspace.data_skim.commonCuts_cff')
 
 #possible trigger modification by user, defualt HLT_Mu9 in EXOMuOct09_cff.py
 #process.exoticaMuHLT.HLTPaths = ['HLT_Mu3']
@@ -69,6 +70,7 @@ process.load('HLTrigger.special.HLTTriggerTypeFilter_cfi')
 process.hltTriggerTypeFilter.SelectedTriggerType = 1
 
 process.endPath = cms.EndPath(process.hltTriggerTypeFilter*
+                              process.primaryVertexFilter*
                               process.singleMuPt5OutputModule+
 #                              process.superClusterPt5OutputModule+
                               process.singlePhotonPt5OutputModule+                              
