@@ -1,0 +1,13 @@
+<use   name="DataFormats/BeamSpot"/>
+<use   name="DataFormats/EgammaCandidate"/>
+<use   name="DataFormats/JetReco"/>
+<use   name="DataFormats/MuonReco"/>
+<use   name="DataFormats/TrackReco"/>
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/ParameterSet"/>
+<use   name="FWCore/ServiceRegistry"/>
+<use   name="FWCore/MessageLogger"/>
+<use   name="root"/>
+<flags   EDM_PLUGIN="1"/>
+<export>
+</export>

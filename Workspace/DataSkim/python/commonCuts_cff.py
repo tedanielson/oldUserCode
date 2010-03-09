@@ -8,3 +8,10 @@ primaryVertexFilter = cms.EDFilter("GoodVertexFilter",
                                    maxAbsZ = cms.double(15),
                                    maxd0 = cms.double(2)
                                    )
+
+printoutModule = cms.EDAnalyzer("EventPrintout",
+                                muonLabel = cms.InputTag("muons"),
+                                photonLabel = cms.InputTag("photons"),
+                                jetLabel = cms.InputTag("iterativeCone5CaloJets"),
+                                electronLabel = cms.InputTag("gsfElectrons")
+                                )
