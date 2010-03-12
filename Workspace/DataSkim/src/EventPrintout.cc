@@ -13,7 +13,7 @@
 //
 // Original Author:  Thomas Erik Danielson,40 1-A11,+41227671646,
 //         Created:  Fri Mar 12 00:22:32 CET 2010
-// $Id: EventPrintout.cc,v 1.1 2010/03/12 03:39:28 tdaniels Exp $
+// $Id: EventPrintout.cc,v 1.2 2010/03/12 20:38:37 tdaniels Exp $
 //
 //
 
@@ -253,7 +253,7 @@ EventPrintout::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       bool r=dWord.at(i);
       int pass = 0;
       if (r) pass = 1;
-      std::cout << "pass = " << pass <<std::endl;
+      //      std::cout << "pass = " << pass <<std::endl;
       l1DecisionMap[ibx+2][i] = pass;
     }
   }
