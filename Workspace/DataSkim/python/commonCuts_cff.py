@@ -13,5 +13,8 @@ printoutModule = cms.EDAnalyzer("EventPrintout",
                                 muonLabel = cms.InputTag("muons"),
                                 photonLabel = cms.InputTag("photons"),
                                 jetLabel = cms.InputTag("iterativeCone5CaloJets"),
-                                electronLabel = cms.InputTag("gsfElectrons")
+                                electronLabel = cms.InputTag("gsfElectrons"),
+                                triggerResults_ = cms.InputTag("TriggerResults","","HLT"),
+                                ObjectMap = cms.InputTag("hltL1GtObjectMap"),
+                                GtDigis = cms.InputTag("gtDigis")
                                 )
