@@ -2,8 +2,9 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("mmm")
 
+process.load('Workspace.data_skim.commonCuts_cff') 
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
-process.GlobalTag.globaltag = 'GR09_H_V6OFF::All'
+process.GlobalTag.globaltag = 'GR09_R_35X_V3::All'
 
 # UNCOMMENT THIS LINE TO RUN ON SETTINGS FROM THE DATABASE
 process.es_prefer_GlobalTag = cms.ESPrefer('PoolDBESSource', 'GlobalTag')
@@ -36,50 +37,38 @@ process.maxEvents = cms.untracked.PSet(
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_1.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_2.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_3.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_4.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_5.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_6.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_7.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_8.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_9.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_10.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_11.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_12.root',
-   #     'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/muonPt5Skim_13.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_1.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_2.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_3.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_4.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_5.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_6.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_7.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_8.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_9.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_10.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_11.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/photonPt5Skim_12.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_1.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_2.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_3.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_4.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_5.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_6.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_7.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_8.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_9.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_10.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_11.root',
-        'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/PhysicsExpress/r124120/jetSkim_12.root'
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123596_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123732_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123815_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123818_OFFLINE.root',
+##    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123906_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123908_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123970_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123976_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123977_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123978_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123985_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_123987_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124009_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124020_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124022_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124023_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124024_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124025_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124027_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124030_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124120_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124228_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124230_OFFLINE.root',
+#    'rfio:/castor/cern.ch/user/t/tdaniels/2009_TPG_SKIMS/OfflineMonitor/goldenSample_124275_OFFLINE.root',
+    'file:goldenSample_124230_OFFLINE.root'
+    )
    )
 
 #,eventsToProcess = cms.untracked.VEventRange('124120:6613074-124120:6613074' )
 #,eventsToProcess = cms.untracked.VEventRange('124120:2161318-124120:2161318' )
 #,eventsToProcess = cms.untracked.VEventRange('124120:8258900-124120:8258900' )
-)
 
 process.copyAll = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string("goldenSample.root") )
 process.printEventNumber = cms.EDAnalyzer("AsciiOutputModule")
-process.out = cms.EndPath(process.copyAll + process.printEventNumber)
+process.out = cms.EndPath(process.printoutModule + process.copyAll)
