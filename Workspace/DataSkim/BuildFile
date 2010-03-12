@@ -1,0 +1,17 @@
+<use name=FWCore/Framework>
+<use name=FWCore/PluginManager>
+<use name=FWCore/ParameterSet>
+<use name=DataFormats/BeamSpot>
+<use name=DataFormats/Common>
+<use name=DataFormats/EgammaCandidates>
+<use name=DataFormats/JetReco>
+<use name=DataFormats/L1GlobalTrigger>
+<use name=DataFormats/MuonReco>
+<use name=DataFormats/TrackReco>
+<flags EDM_PLUGIN=1>
+<export>
+   <lib name=Workspacedata_skim>
+   <use name=FWCore/Framework>
+   <use name=FWCore/PluginManager>
+   <use name=FWCore/ParameterSet>
+</export>
