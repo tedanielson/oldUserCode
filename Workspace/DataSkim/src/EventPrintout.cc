@@ -13,7 +13,7 @@
 //
 // Original Author:  Thomas Erik Danielson,40 1-A11,+41227671646,
 //         Created:  Fri Mar 12 00:22:32 CET 2010
-// $Id$
+// $Id: EventPrintout.cc,v 1.1 2010/03/12 03:39:28 tdaniels Exp $
 //
 //
 
@@ -230,55 +230,79 @@ EventPrintout::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //=========================L1+L1TECH======================                                                                                                 
 
-  //  edm::Handle<L1GlobalTriggerObjectMapRecord> gtObjectMapRecord;                                                                                         
-  //  iEvent.getByLabel(ObjectMap_ , gtObjectMapRecord);                                                                                                     
-  //  const std::vector<L1GlobalTriggerObjectMap>& objMapVec =  gtObjectMapRecord->gtObjectMap();                                                            
-
-  /*  for (std::vector<L1GlobalTriggerObjectMap>::const_iterator itMap = objMapVec.begin();                                                                  
-      itMap != objMapVec.end(); ++itMap) {                                                                                                                   
-      int algoBit = (*itMap).algoBitNumber();                                                                                                                
-      std::string algoNameStr = (*itMap).algoName();                                                                                                         
-      }                                                                                                                                                      
-  */
-
-  // -- L1 algos :                                                                                                                                           
-  //  const DecisionWord dWord = l1Handle->decisionWord();                                                                                                   
-
-  // -- L1 technical bits:                                                                                                                                   
-  //  const TechnicalTriggerWord tWord = l1Handle->technicalTriggerWord();                                                                                   
-
-
   fprintf(outfile,"Technical trigger information\n");
 
   const DecisionWord dWord = l1Handle->decisionWord();
   const TechnicalTriggerWord tWord = l1Handle->technicalTriggerWord();
 
+  int techDecisionMap[5][64];;
+  int l1DecisionMap[5][128];
+
   for (int ibx=-2; ibx <=2; ibx++) {
     TechnicalTriggerWord tWord = l1Handle->technicalTriggerWord(ibx);
-    if (ibx < 0) fprintf(outfile,"   bx %d: ",ibx);
-    else fprintf(outfile,"   bx %d : ",ibx);                                                                                                                 
+    DecisionWord dWord = l1Handle->decisionWord(ibx);
+     //======================TECHNICAL BITS================  
     for (int i=0; i < 64; i++) {
       bool ibit = tWord.at(i);
       int pass = 0;
       if (ibit) pass = 1;
-      fprintf(outfile,"%d",pass);                                                                                                                    
+      techDecisionMap[ibx+2][i] = pass;
     }
-    fprintf(outfile,"\n");                                                                                                                             
+     //=====================L1 BITS========================
+    for (int i=0; i < 128; i++) {
+      bool r=dWord.at(i);
+      int pass = 0;
+      if (r) pass = 1;
+      std::cout << "pass = " << pass <<std::endl;
+      l1DecisionMap[ibx+2][i] = pass;
+    }
+  }
+     //=======================L1 TECHNICAL PRINTOUT========
+  fprintf(outfile,"bx:      -2 -1  0  1  2\n");
+  for (int i = 0; i < 64; i++) {
+    if (i < 10) fprintf(outfile,"bit %d : ",i);
+    else fprintf(outfile,"bit %d: ",i);
+    for (int j = 0; j < 5; j++) {
+      fprintf(outfile,"  %d",techDecisionMap[j][i]);
+    }
+    fprintf(outfile,"\n");
   }
 
-  /*  for (int ibx=-2; ibx <=2; ibx++) {                                                                                                                     
-                                                                                                                                                             
-  const DecisionWord dWord = l1Handle->decisionWord(ibx);                                                                                                    
-  for (int i=0; i< 128; i++) {                                                                                                                               
-  bool r=dWord.at(i);                                                                                                                                        
-                                                                                                                                                             
-  }                                                                                                                                                          
-  }                                                                                                                                                          
-  }                                                                                                                                                          
-  */
+  fprintf(outfile,"L1 trigger information\n");
 
+    //=====================GET L1 PATH NAMES==============
+
+  edm::Handle<L1GlobalTriggerObjectMapRecord> gtObjectMapRecord;
+  iEvent.getByLabel(ObjectMap_ , gtObjectMapRecord);
+  const std::vector<L1GlobalTriggerObjectMap>& objMapVec =  gtObjectMapRecord->gtObjectMap();
+
+  std::vector<std::string> *l1Names = new std::vector<std::string>;
+  std::vector<int> *l1Bits = new std::vector<int>;
+
+  for (std::vector<L1GlobalTriggerObjectMap>::const_iterator itMap = objMapVec.begin();
+       itMap != objMapVec.end(); ++itMap) 
+    {
+      int algoBit = (*itMap).algoBitNumber();
+      (*l1Bits).push_back(algoBit);
+      std::string algoNameStr = (*itMap).algoName();
+      (*l1Names).push_back(algoNameStr);
+    }
+  
+  //  int namesLen = (int) (*l1Names).size();
+  
+  for (int i = 0; i < (*l1Names).size(); i++) {
+    fprintf(outfile,"%s",(*l1Names).at(i).c_str());
+    for (int j = 0; j < 5; j++) {
+      int index = (*l1Bits).at(i);
+      fprintf(outfile,"  %d",l1DecisionMap[j][index]);
+    }
+    fprintf(outfile,"\n");
+  }
+
+  
+  
   //==========================HLT===========================                                                                                                 
-
+  
   edm::TriggerNames namesOfTriggers(*triggerResults);
   fprintf(outfile,"Trigger information: paths firing\n");
   for (unsigned int i = 0; i < triggerResults->size(); i++) {
