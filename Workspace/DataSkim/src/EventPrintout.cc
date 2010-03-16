@@ -13,7 +13,7 @@
 //
 // Original Author:  Thomas Erik Danielson,40 1-A11,+41227671646,
 //         Created:  Fri Mar 12 00:22:32 CET 2010
-// $Id: EventPrintout.cc,v 1.2 2010/03/12 20:38:37 tdaniels Exp $
+// $Id: EventPrintout.cc,v 1.3 2010/03/12 22:50:38 tdaniels Exp $
 //
 //
 
@@ -260,12 +260,18 @@ EventPrintout::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
      //=======================L1 TECHNICAL PRINTOUT========
   fprintf(outfile,"bx:      -2 -1  0  1  2\n");
   for (int i = 0; i < 64; i++) {
-    if (i < 10) fprintf(outfile,"bit %d : ",i);
-    else fprintf(outfile,"bit %d: ",i);
+    bool passone = false; // did a bit fire?
     for (int j = 0; j < 5; j++) {
-      fprintf(outfile,"  %d",techDecisionMap[j][i]);
+      if (techDecisionMap[j][i] == 1) passone = true;
     }
-    fprintf(outfile,"\n");
+    if (passone) {
+      if (i < 10) fprintf(outfile,"bit %d : ",i);
+      else fprintf(outfile,"bit %d: ",i);    
+      for (int j = 0; j < 5; j++) {
+	fprintf(outfile,"  %d",techDecisionMap[j][i]);
+      }
+      fprintf(outfile,"\n");
+    }
   }
 
   fprintf(outfile,"L1 trigger information\n");
@@ -291,12 +297,19 @@ EventPrintout::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   //  int namesLen = (int) (*l1Names).size();
   
   for (int i = 0; i < (*l1Names).size(); i++) {
-    fprintf(outfile,"%s",(*l1Names).at(i).c_str());
+    bool passone = false;
     for (int j = 0; j < 5; j++) {
       int index = (*l1Bits).at(i);
-      fprintf(outfile,"  %d",l1DecisionMap[j][index]);
+      if (l1DecisionMap[j][index] == 1) passone = true;
     }
-    fprintf(outfile,"\n");
+    if (passone) {
+      fprintf(outfile,"%s",(*l1Names).at(i).c_str());
+      for (int j = 0; j < 5; j++) {
+	int index = (*l1Bits).at(i);
+	fprintf(outfile,"  %d",l1DecisionMap[j][index]);
+      }
+      fprintf(outfile,"\n");
+    }
   }
 
   
