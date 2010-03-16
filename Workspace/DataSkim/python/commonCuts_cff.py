@@ -4,7 +4,7 @@ import FWCore.ParameterSet.Config as cms
 
 primaryVertexFilter = cms.EDFilter("GoodVertexFilter",
                                    vertexCollection = cms.InputTag('offlinePrimaryVertices'),
-                                   minimumNumberOfTracks = cms.uint32(3) ,
+                                   minimumNDOF = cms.uint32(4) ,  #CHANGE FOR >= 3.5.4
                                    maxAbsZ = cms.double(15),
                                    maxd0 = cms.double(2)
                                    )
