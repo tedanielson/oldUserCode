@@ -70,7 +70,7 @@ process.load('HLTrigger.special.HLTTriggerTypeFilter_cfi')
 process.hltTriggerTypeFilter.SelectedTriggerType = 1
 
 process.endPath = cms.EndPath(process.hltTriggerTypeFilter*
-                              process.primaryVertexFilter*
+#                              process.primaryVertexFilter*
                               process.singleMuPt5OutputModule+
 #                              process.superClusterPt5OutputModule+
                               process.singlePhotonPt5OutputModule+                              

@@ -16,5 +16,7 @@ printoutModule = cms.EDAnalyzer("EventPrintout",
                                 electronLabel = cms.InputTag("gsfElectrons"),
                                 triggerResults_ = cms.InputTag("TriggerResults","","HLT"),
                                 ObjectMap = cms.InputTag("hltL1GtObjectMap"),
-                                GtDigis = cms.InputTag("gtDigis")
+                                GtDigis = cms.InputTag("gtDigis"),
+                                HistOutFile = cms.untracked.string("l1Plots.root"),
+                                defineBX= cms.untracked.int32(-1)
                                 )

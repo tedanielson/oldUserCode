@@ -13,7 +13,7 @@
 //
 // Original Author:  Thomas Erik Danielson,40 1-A11,+41227671646,
 //         Created:  Fri Mar 12 00:22:32 CET 2010
-// $Id: EventPrintout.cc,v 1.3 2010/03/12 22:50:38 tdaniels Exp $
+// $Id: EventPrintout.cc,v 1.4 2010/03/16 11:07:14 tdaniels Exp $
 //
 //
 
@@ -46,6 +46,11 @@
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerObjectMapRecord.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerObjectMap.h"
 
+// ROOT include files
+#include "TFile.h"
+#include "TH1.h"
+#include "TH2.h"
+
 // Basic Data formats                                                                                                                                        
 // Muon:                                                                                                                                                     
 #include "DataFormats/MuonReco/interface/Muon.h"
@@ -77,17 +82,23 @@ using namespace std;
 //
 
 class EventPrintout : public edm::EDAnalyzer {
-   public:
-      explicit EventPrintout(const edm::ParameterSet&);
-      ~EventPrintout();
-
-
-   private:
-      virtual void beginJob() ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
-
+public:
+  explicit EventPrintout(const edm::ParameterSet&);
+  ~EventPrintout();
+  
+  
+private:
+  virtual void beginJob() ;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&);
+  virtual void endJob() ;
+  
+  void MakeL1Histo(const edm::Event& iEvent, const edm::EventSetup& iSetup);
+  
+  
       // ----------member data ---------------------------
+
+  std::string fOutputFileName ;
+  TFile*      hOutputFile ;
 
   FILE * outfile;
   edm::InputTag muonLabel;
@@ -98,6 +109,20 @@ class EventPrintout : public edm::EDAnalyzer {
 
   edm::InputTag ObjectMap_ ;
   edm::InputTag GtDigis_ ;
+  int defineBX_;
+
+  // -- L1 physics algorithms:                                                                             
+  TH2F* Timing_L1A_1;
+  TH2F* Timing_L1A_2;
+  TH2F* Timing_L1A_3;
+  TH2F* Timing_L1A_4;
+
+  // -- L1 technical bits:                                                                                 
+  TH2F* Timing_L1T_1;
+  TH2F* Timing_L1T_2;
+
+  int npass_ ;
+  bool first_ ;
 
 };
 
@@ -127,6 +152,11 @@ EventPrintout::EventPrintout(const edm::ParameterSet& iConfig)
   ObjectMap_ = iConfig.getParameter<edm::InputTag>("ObjectMap");
   GtDigis_   = iConfig.getParameter<edm::InputTag>("GtDigis");
 
+  defineBX_ = iConfig.getUntrackedParameter < int > ("defineBX", -1);
+
+  fOutputFileName = iConfig.getUntrackedParameter<string>("HistOutFile");
+
+  //  first_ = true;
 }
 
 
@@ -147,6 +177,41 @@ EventPrintout::~EventPrintout()
 void
 EventPrintout::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+
+  int ibx = iEvent.eventAuxiliary().bunchCrossing();
+  if (defineBX_ != -1 && defineBX_ !=ibx ) return;
+
+  npass_ ++ ;
+
+  if (first_) {
+    //Get the names of the L1 paths                                                                               
+    //for the moment the names are not included in L1GlobalTriggerReadoutRecord                                 
+    //we need to use L1GlobalTriggerObjectMapRecord                                                             
+    edm::Handle<L1GlobalTriggerObjectMapRecord> gtObjectMapRecord;
+    //    iEvent.getByLabel("hltL1GtObjectMap", gtObjectMapRecord);                                             
+    iEvent.getByLabel(ObjectMap_ , gtObjectMapRecord);
+    const std::vector<L1GlobalTriggerObjectMap>& objMapVec =
+      gtObjectMapRecord->gtObjectMap();
+
+    for (std::vector<L1GlobalTriggerObjectMap>::const_iterator itMap = objMapVec.begin();
+	 itMap != objMapVec.end(); ++itMap) {
+      int algoBit = (*itMap).algoBitNumber();
+      std::string algoNameStr = (*itMap).algoName();
+      char* thename = (char*)(algoNameStr.c_str());
+
+      if (algoBit < 32) Timing_L1A_1 -> GetYaxis() -> SetBinLabel(algoBit+1,thename);
+      else if (algoBit < 64) Timing_L1A_2 -> GetYaxis() -> SetBinLabel(algoBit+1-32,thename);
+      else if (algoBit < 96) Timing_L1A_3 -> GetYaxis() -> SetBinLabel(algoBit+1-64,thename);
+      else if (algoBit < 128) Timing_L1A_4 -> GetYaxis() -> SetBinLabel(algoBit+1-96,thename);
+
+    }
+
+
+    first_ = false;
+
+  }
+  MakeL1Histo(iEvent, iSetup);
+
 
   edm::Handle< reco::MuonCollection > muons;
   edm::Handle< reco::CaloJetCollection > jets;
@@ -329,17 +394,106 @@ EventPrintout::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
 }
 
+void EventPrintout::MakeL1Histo(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+{
+  edm::Handle<L1GlobalTriggerReadoutRecord> l1Handle;
+  // iEvent.getByLabel("myGtDigis", l1Handle);                                                             
+  iEvent.getByLabel(GtDigis_, l1Handle);
+  
+  // -- L1 algos :                                                                                         
+  const DecisionWord dWord = l1Handle->decisionWord();
+  
+  // -- L1 technical bits:                                                                                 
+  const TechnicalTriggerWord tWord = l1Handle->technicalTriggerWord();
+
+  
+  for (int ibx=-2; ibx <=2; ibx++) {
+    
+    const TechnicalTriggerWord tWord = l1Handle->technicalTriggerWord(ibx);
+    for (int i=0; i < 64; i++) {
+      bool ibit = tWord.at(i);
+      if (ibit) {
+	if (i < 32) Timing_L1T_1 -> Fill(ibx,i);
+	else Timing_L1T_2 -> Fill(ibx,i);
+      }
+    }      
+    const DecisionWord dWord = l1Handle->decisionWord(ibx);
+    for (int i=0; i< 128; i++) {
+      bool r=dWord.at(i);
+      if (r) {
+	if (i < 32) Timing_L1A_1 -> Fill(ibx,i);
+	else if (i < 64) Timing_L1A_2 -> Fill(ibx,i);
+	else if (i < 96) Timing_L1A_3 -> Fill(ibx,i);
+	else if (i < 128) Timing_L1A_4 -> Fill(ibx,i);
+      }
+    }
+    
+  }  // end loop on ibx                                                                                    
+  
+  
+}
+
 
 // ------------ method called once each job just before starting event loop  ------------
 void 
 EventPrintout::beginJob()
 {
+  npass_ = 0;
+  
+  hOutputFile   = new TFile( fOutputFileName.c_str(), "RECREATE" ) ;
+
+  first_ = true;
+
+  Timing_L1A_1 = new TH2F("Timing_L1A_1","Timing_L1A_1",5,-2.5,2.5,32,-0.5,31.5);
+  Timing_L1A_2 = new TH2F("Timing_L1A_2","Timing_L1A_2",5,-2.5,2.5,32,31.5,63.5);
+  Timing_L1A_3 = new TH2F("Timing_L1A_3","Timing_L1A_3",5,-2.5,2.5,32,63.5,95.5);
+  Timing_L1A_4 = new TH2F("Timing_L1A_4","Timing_L1A_4",5,-2.5,2.5,32,95.5,127.5);
+
+  Timing_L1T_1 = new TH2F("Timing_L1T_1","Timing_L1T_1",5,-2.5,2.5,32,-0.5,31.5);
+  Timing_L1T_2 = new TH2F("Timing_L1T_2","Timing_L1T_2",5,-2.5,2.5,32,31.5,63.5);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void 
 EventPrintout::endJob() {
   fclose(outfile);
+  hOutputFile->cd();
+
+  std::cout << " Number of events passing the selection : " << npass_ << std::endl;
+
+  int nbinsX = Timing_L1A_1->GetNbinsX();
+  int nbinsY = Timing_L1A_1->GetNbinsY();
+
+  for (int ix=1; ix <= nbinsX; ix ++) {
+    for (int iy=1; iy <= nbinsY; iy ++) {
+      Timing_L1A_1 -> SetBinContent(ix, iy, (Timing_L1A_1->GetBinContent(ix, iy)/npass_) );
+      Timing_L1A_2 -> SetBinContent(ix, iy, (Timing_L1A_2->GetBinContent(ix, iy)/npass_) );
+      Timing_L1A_3 -> SetBinContent(ix, iy, (Timing_L1A_3->GetBinContent(ix, iy)/npass_) );
+      Timing_L1A_4 -> SetBinContent(ix, iy, (Timing_L1A_4->GetBinContent(ix, iy)/npass_) );
+    }
+  }
+
+  nbinsX = Timing_L1T_1 ->GetNbinsX();
+  nbinsY = Timing_L1T_2 ->GetNbinsY();
+  for (int ix=1; ix <= nbinsX; ix ++) {
+    for (int iy=1; iy <= nbinsY; iy ++) {
+      Timing_L1T_1 -> SetBinContent(ix, iy, (Timing_L1T_1 ->GetBinContent(ix, iy)/npass_) );
+      Timing_L1T_2 -> SetBinContent(ix, iy, (Timing_L1T_2 ->GetBinContent(ix, iy)/npass_) );
+    }
+  }
+
+  Timing_L1A_1 -> Write();
+  Timing_L1A_2 -> Write();
+  Timing_L1A_3 -> Write();
+  Timing_L1A_4 -> Write();
+
+  Timing_L1T_1 -> Write();
+  Timing_L1T_2 -> Write();
+
+  hOutputFile->Write() ;
+  hOutputFile->Close() ;
+
+
 }
 
 //define this as a plug-in
