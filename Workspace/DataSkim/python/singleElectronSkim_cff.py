@@ -19,55 +19,63 @@ import FWCore.ParameterSet.Config as cms
 
 singleRecoElectronPt20Filter = cms.EDFilter("GsfElectronRefSelector",
                                         src = cms.InputTag("gsfElectrons"),
-                                        cut = cms.string('pt > 20.0 && abs(eta) < 2.1 ' ),
+                                        cut = cms.string('pt > 20.0 && abs(eta) < 2.5 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1) 
                                         )
 
 singleRecoElectronPt15Filter = cms.EDFilter("GsfElectronRefSelector",
                                         src = cms.InputTag("gsfElectrons"),
-                                        cut = cms.string('pt > 15.0 && abs(eta) < 2.1 ' ),
+                                        cut = cms.string('pt > 15.0 && abs(eta) < 2.5 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
 singleRecoElectronPt10Filter = cms.EDFilter("GsfElectronRefSelector",
                                         src = cms.InputTag("gsfElectrons"),
-                                        cut = cms.string('pt > 10.0 && abs(eta) < 2.1 ' ),
+                                        cut = cms.string('pt > 10.0 && abs(eta) < 2.5 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
 singleRecoElectronPt5Filter = cms.EDFilter("GsfElectronRefSelector",
                                         src = cms.InputTag("gsfElectrons"),
-                                        cut = cms.string('pt > 1.0 && abs(eta) < 2.1 ' ),
+                                        cut = cms.string('pt > 5.0 && abs(eta) < 2.5 ' ),
                                         filter = cms.bool(True),
                                         minN    = cms.int32(1)
                                         )
 
-superClusterMerger =  cms.EDFilter("EgammaSuperClusterMerger",
-                                   src = cms.VInputTag(cms.InputTag('correctedHybridSuperClusters'),
-                                                       cms.InputTag('correctedMulti5x5SuperClustersWithPreshower'))
-                                   )
-superClusterCands = cms.EDProducer("ConcreteEcalCandidateProducer",
-                                   src = cms.InputTag("superClusterMerger"),
-                                   particleType = cms.string('e-')
-                                   )
+singleRecoElectronPt1Filter = cms.EDFilter("GsfElectronRefSelector",
+                                           src = cms.InputTag("gsfElectrons"),
+                                           cut = cms.string('pt > 1.0 && abs(eta) < 2.5 ' ),
+                                           filter = cms.bool(True),
+                                           minN    = cms.int32(1)
+                                           )
 
-goodSuperClusters = cms.EDFilter("CandViewRefSelector",
-                                 src = cms.InputTag("superClusterCands"),
-                                 cut = cms.string('et > 1.0')
-                                 )
 
-superClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
-                                      src = cms.InputTag("goodSuperClusters"),
-                                      minNumber = cms.uint32(1)
-                                      )
+#superClusterMerger =  cms.EDFilter("EgammaSuperClusterMerger",
+#                                   src = cms.VInputTag(cms.InputTag('correctedHybridSuperClusters'),
+#                                                       cms.InputTag('correctedMulti5x5SuperClustersWithPreshower'))
+#                                   )
+#superClusterCands = cms.EDProducer("ConcreteEcalCandidateProducer",
+#                                   src = cms.InputTag("superClusterMerger"),
+#                                   particleType = cms.string('e-')
+#                                   )
 
-electronCounter = cms.EDFilter("CandViewCountFilter",
-                               src = cms.InputTag("gsfElectrons"),
-                               minNumber = cms.uint32(1)
-                               )
+#goodSuperClusters = cms.EDFilter("CandViewRefSelector",
+#                                 src = cms.InputTag("superClusterCands"),
+#                                 cut = cms.string('et > 1.0')
+#                                 )
+
+#superClusterPt5Filter = cms.EDFilter("CandViewCountFilter",
+#                                      src = cms.InputTag("goodSuperClusters"),
+#                                      minNumber = cms.uint32(1)
+#                                      )
+
+#electronCounter = cms.EDFilter("CandViewCountFilter",
+#                               src = cms.InputTag("gsfElectrons"),
+#                               minNumber = cms.uint32(1)
+#                               )
 
 #from RecoEgamma.EgammaElectronProducers.ecalDrivenElectronSeeds_cfi import *
 
@@ -108,6 +116,11 @@ singleElectronPt5RecoQualitySeq = cms.Sequence(
         singleRecoElectronPt5Filter
         )
 
-singleElectronSCRecoQualitySeq = cms.Sequence(
-    superClusterMerger+superClusterCands+goodSuperClusters+superClusterPt5Filter+singleRecoElectronPt5Filter
-    )
+singleElectronPt1RecoQualitySeq = cms.Sequence(
+            #singleElectronHLT+
+            singleRecoElectronPt1Filter
+                    )
+
+#singleElectronSCRecoQualitySeq = cms.Sequence(
+#    singleRecoElectronPt5Filter
+#    )

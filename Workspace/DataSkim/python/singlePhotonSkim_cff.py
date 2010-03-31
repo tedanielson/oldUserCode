@@ -17,22 +17,22 @@ import FWCore.ParameterSet.Config as cms
 #Define the Reco quality cut
 singlePhotonPt20Filter = cms.EDFilter("PhotonSelector",
                                      src = cms.InputTag("photons"),
-                                     cut = cms.string('pt > 20 && abs(eta) < 2.0' ),
+                                     cut = cms.string('pt > 20 && abs(eta) < 2.7' ),
                                      filter = cms.bool(True)                                                  
 )
 singlePhotonPt15Filter = cms.EDFilter("PhotonSelector",
                                       src = cms.InputTag("photons"),
-                                      cut = cms.string('pt > 15 && abs(eta) < 2.0' ),
+                                      cut = cms.string('pt > 15 && abs(eta) < 2.7' ),
                                       filter = cms.bool(True)
                                       )
 singlePhotonPt10Filter = cms.EDFilter("PhotonSelector",
                                       src = cms.InputTag("photons"),
-                                      cut = cms.string('pt > 10 && abs(eta) < 2.0' ),
+                                      cut = cms.string('pt > 10 && abs(eta) < 2.7' ),
                                       filter = cms.bool(True)
                                       )
 singlePhotonPt5Filter = cms.EDFilter("PhotonSelector",
                                      src = cms.InputTag("photons"),
-                                     cut = cms.string('pt > 5 && abs(eta) < 2.0' ),
+                                     cut = cms.string('pt > 5 && abs(eta) < 2.7' ),
                                      filter = cms.bool(True)
                                      )
 

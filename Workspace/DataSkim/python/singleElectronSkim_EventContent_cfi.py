@@ -49,6 +49,18 @@ singleElectronPt5OutputModule = cms.OutputModule("PoolOutputModule",
                                            fileName = cms.untracked.string('ElectronPt5Skim.root') # can be modified later in EXOMuOct09_cfg.py in  test directory.
                                            )
 
+singleElectronPt1OutputModule = cms.OutputModule("PoolOutputModule",
+                                                 outputCommands = cms.untracked.vstring(),
+                                                 SelectEvents = cms.untracked.PSet(
+    SelectEvents = cms.vstring("singleElectronPt1SkimPath") #the selector name must be same as the path name in EXOMuOct09_cfg.py in test directory.
+    ),
+                                                 dataset = cms.untracked.PSet(
+    filterName = cms.untracked.string('EXOMu'), #name a name you like.
+    dataTier = cms.untracked.string('EXOGroup')
+    ),
+                                                 fileName = cms.untracked.string('ElectronPt1Skim.root') # can be modified later in EXOMuOct09_cfg.py in  test directory.
+                                                 )
+
 superClusterPt5OutputModule = cms.OutputModule("PoolOutputModule",
                                                outputCommands = cms.untracked.vstring(),
                                                SelectEvents = cms.untracked.PSet(
@@ -67,6 +79,7 @@ singleElectronPt20OutputModule.outputCommands.extend(FEVTHLTALLEventContent.outp
 singleElectronPt15OutputModule.outputCommands.extend(FEVTHLTALLEventContent.outputCommands)
 singleElectronPt10OutputModule.outputCommands.extend(FEVTHLTALLEventContent.outputCommands)
 singleElectronPt5OutputModule.outputCommands.extend(FEVTHLTALLEventContent.outputCommands)
+singleElectronPt1OutputModule.outputCommands.extend(FEVTHLTALLEventContent.outputCommands)
 superClusterPt5OutputModule.outputCommands.extend(FEVTHLTALLEventContent.outputCommands)
 #add specific content you need. 
 #SpecifiedEvenetContent=cms.PSet(
