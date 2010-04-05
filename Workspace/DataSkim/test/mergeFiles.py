@@ -6,7 +6,8 @@ process.load('Workspace.data_skim.commonCuts_cff')
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 process.GlobalTag.globaltag = 'GR10_E_V4::All'
 
-process.es_prefer_GlobalTag = cms.ESPrefer('PoolDBESSource', 'GlobalTag')
+#UNCOMMENT THIS TO USE REAL MASKING FOR L1T
+#process.es_prefer_GlobalTag = cms.ESPrefer('PoolDBESSource', 'GlobalTag')
 
 process.DQMStore = cms.Service("DQMStore")
 
@@ -49,6 +50,8 @@ process.source = cms.Source("PoolSource",
 
 #UNCOMMENT THIS IN THE PATH TO CUT ON THE TECH TRIGGER
 process.load ('L1TriggerConfig.L1GtConfigProducers.L1GtTriggerMaskTechTrigConfig_cff')
+#KEEP THIS TO RESET L1T PRESCALES
+process.es_prefer_l1GtTriggerMaskTechTrig = cms.ESPrefer("L1GtTriggerMaskTechTrigTrivialProducer","l1GtTriggerMaskTechTrig")
 process.load('HLTrigger/HLTfilters/hltLevel1GTSeed_cfi')
 process.L1T1=process.hltLevel1GTSeed.clone()
 process.L1T1.L1TechTriggerSeeding = cms.bool(True)
