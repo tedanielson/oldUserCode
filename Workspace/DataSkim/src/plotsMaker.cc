@@ -13,7 +13,7 @@
 //
 // Original Author:  Emmanuelle Perez
 //         Created:  Wed Dec  9 10:21:40 CET 2009
-// $Id$
+// $Id: plotsMaker.cc,v 1.1 2010/03/29 21:06:52 tdaniels Exp $
 //
 //
 
@@ -29,12 +29,16 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "FWCore/Framework/interface/ESHandle.h"
 
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Framework/interface/TriggerNames.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetup.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetupFwd.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
+#include "CondFormats/L1TObjects/interface/L1GtTriggerMenuFwd.h"
+#include "CondFormats/L1TObjects/interface/L1GtTriggerMenu.h"
+#include "CondFormats/DataRecord/interface/L1GtTriggerMenuRcd.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerObjectMapRecord.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerObjectMap.h"
 
@@ -149,38 +153,50 @@ plotsMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
- if (first_) {
-
-   //Get the names of the L1 paths
-     //for the moment the names are not included in L1GlobalTriggerReadoutRecord
-     //we need to use L1GlobalTriggerObjectMapRecord
-     edm::Handle<L1GlobalTriggerObjectMapRecord> gtObjectMapRecord;
-     //    iEvent.getByLabel("hltL1GtObjectMap", gtObjectMapRecord);
-     iEvent.getByLabel(ObjectMap_ , gtObjectMapRecord);
-      const std::vector<L1GlobalTriggerObjectMap>& objMapVec =
-       gtObjectMapRecord->gtObjectMap();
-
-      for (std::vector<L1GlobalTriggerObjectMap>::const_iterator itMap = objMapVec.begin();
-          itMap != objMapVec.end(); ++itMap) {
-       int algoBit = (*itMap).algoBitNumber();
-        std::string algoNameStr = (*itMap).algoName();
-        char* thename = (char*)(algoNameStr.c_str());
-
-        if (algoBit < 32) Timing_L1A_1 -> GetYaxis() -> SetBinLabel(algoBit+1,thename);
-        else if (algoBit < 64) Timing_L1A_2 -> GetYaxis() -> SetBinLabel(algoBit+1-32,thename);
-        else if (algoBit < 96) Timing_L1A_3 -> GetYaxis() -> SetBinLabel(algoBit+1-64,thename);
-        else if (algoBit < 128) Timing_L1A_4 -> GetYaxis() -> SetBinLabel(algoBit+1-96,thename);
-
-      }
-
-
-   first_ = false;
-
+  if (first_) {
+    
+    //Get the names of the L1 paths
+    //for the moment the names are not included in L1GlobalTriggerReadoutRecord
+    //we need to use L1GlobalTriggerObjectMapRecord
+    edm::Handle<L1GlobalTriggerObjectMapRecord> gtObjectMapRecord;
+    //    iEvent.getByLabel("hltL1GtObjectMap", gtObjectMapRecord);
+    iEvent.getByLabel(ObjectMap_ , gtObjectMapRecord);
+    const std::vector<L1GlobalTriggerObjectMap>& objMapVec =
+      gtObjectMapRecord->gtObjectMap();
+    
+    for (std::vector<L1GlobalTriggerObjectMap>::const_iterator itMap = objMapVec.begin();
+	 itMap != objMapVec.end(); ++itMap) {
+      int algoBit = (*itMap).algoBitNumber();
+      std::string algoNameStr = (*itMap).algoName();
+      char* thename = (char*)(algoNameStr.c_str());
+      
+      if (algoBit < 32) Timing_L1A_1 -> GetYaxis() -> SetBinLabel(algoBit+1,thename);
+      else if (algoBit < 64) Timing_L1A_2 -> GetYaxis() -> SetBinLabel(algoBit+1-32,thename);
+      else if (algoBit < 96) Timing_L1A_3 -> GetYaxis() -> SetBinLabel(algoBit+1-64,thename);
+      else if (algoBit < 128) Timing_L1A_4 -> GetYaxis() -> SetBinLabel(algoBit+1-96,thename);
+      
+    }
+    
+    edm::ESHandle<L1GtTriggerMenu> menuRcd;
+    iSetup.get<L1GtTriggerMenuRcd>().get(menuRcd) ;
+    const L1GtTriggerMenu* menu = menuRcd.product(); 
+    std::cout << "How many bits are in this record?" << menu->gtTechnicalTriggerMap().size() << std::endl;
+    for (CItAlgo techTrig = menu->gtTechnicalTriggerMap().begin(); techTrig != menu->gtTechnicalTriggerMap().end(); ++techTrig) {
+      int techBit = (techTrig->second).algoBitNumber();
+      std::cout << "counter = " << techBit << std::endl;
+      std::string techNameStr = (techTrig->second).algoName();
+      char* techName = (char*)(techNameStr.c_str());
+      if (techBit < 32) Timing_L1T_1 -> GetYaxis() -> SetBinLabel(techBit +1, techName);
+      else if (techBit < 64) Timing_L1T_2 -> GetYaxis() -> SetBinLabel(techBit+1-32, techName);
+    }
+    
+    first_ = false;
+    
   }
-
-
-
-
+  
+  
+  
+  
 // -- Fill L1 histos
   MakeL1Histo(iEvent, iSetup);
 
