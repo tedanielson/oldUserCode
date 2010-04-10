@@ -74,7 +74,7 @@ twoEmClusters = cms.Sequence(
 #Define group sequence, using HLT/Reco quality cut. 
 #exoticaMuHLTQualitySeq = cms.Sequence()
 jetRecoQualitySeq = cms.Sequence(
-    twoEmClusters +
+#    twoEmClusters +
     Jet2+Jet1+dijetFilter+jetFilter
 )
 
