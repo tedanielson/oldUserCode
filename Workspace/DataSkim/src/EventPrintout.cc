@@ -13,7 +13,7 @@
 //
 // Original Author:  Thomas Erik Danielson,40 1-A11,+41227671646,
 //         Created:  Fri Mar 12 00:22:32 CET 2010
-// $Id: EventPrintout.cc,v 1.4 2010/03/16 11:07:14 tdaniels Exp $
+// $Id: EventPrintout.cc,v 1.6 2010/03/29 21:06:51 tdaniels Exp $
 //
 //
 
@@ -222,8 +222,7 @@ EventPrintout::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   if (nElectrons > 0) fprintf(outfile,"Electron information\n");
   for (int iElec = 0; iElec < nElectrons; iElec++) {
     reco::GsfElectronRef refElec(electrons,iElec);
-    double electronPt = refElec->pt(); double electronEta = refElec->eta(); double electronPhi = refElec->phi(); double electronE5x5 = (double)refElec->e5x5\
-														   ();
+    double electronPt = refElec->pt(); double electronEta = refElec->eta(); double electronPhi = refElec->phi(); double electronE5x5 = (double)refElec->e5x5();
     double electronHOverE = (double)refElec->hadronicOverEm();
     fprintf(outfile,"   Et, eta, phi, e5x5, hadronicOverEm: %f %f %f %f %f\n",electronPt,electronEta,electronPhi,electronE5x5,electronHOverE);
   }
