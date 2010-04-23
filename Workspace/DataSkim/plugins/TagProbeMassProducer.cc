@@ -13,19 +13,21 @@
 //
 // Original Author:  Nadia Adam
 //         Created:  Wed Apr 16 09:46:30 CDT 2008
-// $Id: TagProbeMassProducer.cc,v 1.1 2009/11/06 23:04:39 tdaniels Exp $
+// $Id: TagProbeMassProducer.cc,v 1.2 2009/12/07 14:07:10 tdaniels Exp $
 //
 //
 
 
 // User includes
 #include "Workspace/data_skim/interface/TagProbeMassProducer.h"
-#include "PhysicsTools/TagAndProbe/interface/CandidateAssociation.h"
+//#include "PhysicsTools/TagAndProbe/interface/CandidateAssociation.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
+#include "DataFormats/Candidate/interface/CandidateFwd.h"
+#include "DataFormats/Common/interface/AssociationMap.h"
 
 #include "DataFormats/Math/interface/deltaR.h"
-#include "DataFormats/MuonReco/interface/Muon.h"
-#include "DataFormats/MuonReco/interface/MuonFwd.h"
-
+//#include "DataFormats/MuonReco/interface/Muon.h"
+//#include "DataFormats/MuonReco/interface/MuonFwd.h"
 
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
